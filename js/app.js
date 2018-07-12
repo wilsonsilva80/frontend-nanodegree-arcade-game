@@ -99,6 +99,8 @@ const gameWon = () => {
         alert('You won the game');
         player.x = 200;
         player.y = 400;
+        allEnemies.length = 0;
+        enemiesArray();
     }
 };
 
@@ -106,8 +108,13 @@ const gameWon = () => {
 var allEnemies = [];
 //array with the y positions of the enemies
 const enemiesPos = [45, 110, 160, 210];
+
+
+const enemiesArray = function() {
+    allEnemies = enemiesPos.map(el => new Enemy(0, el));
+}
 //call the enemies
-allEnemies = enemiesPos.map(el => new Enemy(0, el));
+enemiesArray();
 
 player = new Player();
 
