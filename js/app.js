@@ -1,27 +1,29 @@
-// TODO: create a startPos to Player so that there's no need to instantiate it when creating it
-// TODO: create a startPos to Enemy with a random start position on the y axis
-// TODO: create a speed parameter to enemy and randomize it when instantiating it
+// TODO: Enemy.prototype.checkCollisions
 
 // Enemies our player must avoid
-var Enemy = function(x, y, speed = 20) {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
+var Enemy = function(x = 0, y = 200, speed = 40) {
+
     this.x = x;
-    this.y = y;
-    this.speed = speed;
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
+    this.startPos();
+
     this.sprite = 'images/enemy-bug.png';
 };
+
+Enemy.prototype.startPos = function() {
+    let randomY = Math.random() * (230 - 40 + 1) + 40;
+    let randomSpeed = Math.random() * 50 + 5;
+    this.y = randomY;
+    this.speed = randomSpeed;
+}
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-
-    this.x *= dt;
+    this.x += this.speed * dt;
+    // console.log(`enemy y: ${this.y} \n enemy speed: ${this.speed}`);
+    if( this.x >= 400) {
+        this.x = 0;
+    }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -29,14 +31,16 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-var Player = function (x, y) {
-    this.x = x;
-    this.y = y;
+//Player class
+var Player = function () {
 
+    this.startPos();
     this.sprite = 'images/char-boy.png';
+}
+
+Player.prototype.startPos = function() {
+    this.x = 200;
+    this.y = 400;
 }
 
 Player.prototype.update = function() {
@@ -93,17 +97,22 @@ const gameWon = () => {
     }
 }
 
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-allEnemies = [];
-var enemy = new Enemy(0, 200);
 
-allEnemies.push(enemy);
-player = new Player(200, 400);
+allEnemies = [];
+//Create between 1 to 6 enemies
+const addEnemies = () => {
+    randomEnemies = Math.random() * 5 + 1;
+    for(let i = 0; i < randomEnemies; i++) {
+        var enemy = new Enemy();
+        allEnemies.push(enemy);
+    }
+}
+addEnemies();
+
+player = new Player();
 
 // This listens for key presses and sends the keys to your
-// Player.handleInput() method. You don't need to modify this.
+// Player.handleInput() method.
 document.addEventListener('keydown', function(e) {
     var allowedKeys = {
         37: 'left',
