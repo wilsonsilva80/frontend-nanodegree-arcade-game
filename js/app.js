@@ -7,7 +7,7 @@ var Enemy = function(x = 0, y = 200, speed = 40) {
 
     this.sprite = 'images/enemy-bug.png';
 };
-
+//start position of the enemy
 Enemy.prototype.startPos = function() {
 
     let randomSpeed = Math.random() * 50 + 5;
@@ -29,7 +29,7 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
-
+//check collisions between the enemies and player
 Enemy.prototype.checkCollisions = function() {
     if (player.x - this.x <= 75 && player.x - this.x >= -75 &&
         player.y - this.y <= 30 && player.y - this.y >= -60) {
@@ -43,7 +43,7 @@ var Player = function () {
     this.startPos();
     this.sprite = 'images/char-boy.png';
 }
-
+//start position of the player
 Player.prototype.startPos = function() {
     this.x = 200;
     this.y = 400;
@@ -74,7 +74,7 @@ Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-
+//handle the input given by the user
 Player.prototype.handleInput = function (keyPress) {
     if (keyPress == 'left') {
         this.x -= 15;
@@ -91,22 +91,22 @@ Player.prototype.handleInput = function (keyPress) {
     if (keyPress == 'down') {
         this.y += 15;
     }
-    // console.log(`x: ${this.x} \n y: ${this.y}`);
 
 }
 
 const gameWon = () => {
     if (player.y <= -25) {
-        console.log('You won the game');
+        alert('You won the game');
         player.x = 200;
         player.y = 400;
     }
-}
+};
 
 
 var allEnemies = [];
-
+//array with the y positions of the enemies
 const enemiesPos = [45, 110, 160, 210];
+//call the enemies
 allEnemies = enemiesPos.map(el => new Enemy(0, el));
 
 player = new Player();
