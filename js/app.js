@@ -1,18 +1,16 @@
-// TODO: Enemy.prototype.checkCollisions
-
 // Enemies our player must avoid
 var Enemy = function(x = 0, y = 200, speed = 40) {
 
     this.x = x;
+    this.y = y;
     this.startPos();
 
     this.sprite = 'images/enemy-bug.png';
 };
 
 Enemy.prototype.startPos = function() {
-    let randomY = Math.random() * (230 - 40 + 1) + 40;
+
     let randomSpeed = Math.random() * 50 + 5;
-    this.y = randomY;
     this.speed = randomSpeed;
 }
 
@@ -24,12 +22,20 @@ Enemy.prototype.update = function(dt) {
     if( this.x >= 400) {
         this.x = 0;
     }
+    this.checkCollisions();
 };
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
+
+Enemy.prototype.checkCollisions = function() {
+    if (player.x - this.x <= 75 && player.x - this.x >= -75 &&
+        player.y - this.y <= 30 && player.y - this.y >= -60) {
+        player.startPos();
+    }
+}
 
 //Player class
 var Player = function () {
@@ -85,7 +91,7 @@ Player.prototype.handleInput = function (keyPress) {
     if (keyPress == 'down') {
         this.y += 15;
     }
-    console.log(`x: ${this.x} \n y: ${this.y}`);
+    // console.log(`x: ${this.x} \n y: ${this.y}`);
 
 }
 
@@ -98,16 +104,10 @@ const gameWon = () => {
 }
 
 
-allEnemies = [];
-//Create between 1 to 6 enemies
-const addEnemies = () => {
-    randomEnemies = Math.random() * 5 + 1;
-    for(let i = 0; i < randomEnemies; i++) {
-        var enemy = new Enemy();
-        allEnemies.push(enemy);
-    }
-}
-addEnemies();
+var allEnemies = [];
+
+const enemiesPos = [45, 110, 160, 210];
+allEnemies = enemiesPos.map(el => new Enemy(0, el));
 
 player = new Player();
 
